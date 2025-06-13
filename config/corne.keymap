@@ -9,155 +9,158 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/outputs.h>
 
-#define DEFAULT 0
-#define NUM     1
-#define LNUM    2
-#define FN      3
-#define APP     4
-#define SYSTEM  5
+/* Слои клавиатуры */
+#define DEFAULT 0  // Базовый слой
+#define NUM     1  // Слой с цифрами
+#define LNUM    2  // Альтернативный слой с цифрами (левая рука)
+#define FN      3  // Функциональный слой
+#define APP     4  // Слой для приложений
+#define SYSTEM  5  // Системный слой
 
+/* Настройка параметров удержания/тапа */
 &lt { quick-tap-ms = <200>; };
 &mt { quick-tap-ms = <200>; };
 
 / {
-
-  behaviors {
-    
-    graves: grave_escape {
-      compatible = "zmk,behavior-mod-morph";
-      #binding-cells = <0>;
-      bindings = <&lhp APP GRAVE>, <&kp ESC>;
-      mods = <(MOD_LGUI|MOD_RGUI)>;
-    };
+    /* Определение комбо F+J для caps_word */
+    combos {
+        label = "Combos for Caps Word";
+        /* Комбо для клавиш F и J, используемое для активации caps_word */
+        compatible = "zmk,combos";
+        combo_caps_fj {
+            timeout-ms = <50>;
+            key-positions = <16 19>; // Позиции клавиш F и J
+            bindings = <&caps_word>;
+        };
       
-    hm: homerow_mods {
-      compatible = "zmk,behavior-hold-tap";
-      label = "HOMEROW_MODS";
-      #binding-cells = <2>;
-      tapping_term_ms = <300>;
-      quick-tap-ms = <300>;
-      flavor = "tap-preferred";
-      bindings = <&kp>, <&kp>;
+        /* Комбо для клавиш A и SEMI, используемое для активации caps_word */
+        combo_caps_asemi{
+            timeout-ms = <50>;
+            key-positions = <13 22>;  // Позиции клавиш A и SEMI
+            bindings = <&caps_word>;
+        };
     };
 
-    hmt: homerow_mods_no_quicktap {
-      compatible = "zmk,behavior-hold-tap";
-      label = "HOMEROW_MODS";
-      #binding-cells = <2>;
-      tapping_term_ms = <200>;
-      quick-tap-ms = <200>;
-      flavor = "balanced";
-      bindings = <&kp>, <&kp>;
+    behaviors {
+        /* Модификатор для клавиши Grave/Escape */
+        graves: grave_escape {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&lhp APP GRAVE>, <&kp ESC>;
+            mods = <(MOD_LGUI|MOD_RGUI)>;
+        };
+        
+        /* Модификаторы для домашнего ряда (HOMEROW) */
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping_term_ms = <300>;
+            quick-tap-ms = <300>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+
+        /* Модификаторы для домашнего ряда без быстрого тапа */
+        hmt: homerow_mods_no_quicktap {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping_term_ms = <200>;
+            quick-tap-ms = <200>;
+            flavor = "balanced";
+            bindings = <&kp>, <&kp>;
+        };
+
+        /* Приоритет тапа для переключения слоёв */
+        ltp: layer_tap_prefered {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_TAP_PREFERED";
+            #binding-cells = <2>;
+            tapping_term_ms = <200>;
+            quick-tap-ms = <100>;
+            flavor = "tap-preferred";
+            bindings = <&mo>, <&kp>;
+        };
+
+        /* Приоритет удержания для переключения слоёв */
+        lhp: layer_hold_prefered {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_HOLD_PREFERED";
+            #binding-cells = <2>;
+            tapping_term_ms = <250>;
+            flavor = "hold-preferred";
+            bindings = <&mo>, <&kp>;
+        };
     };
 
-    ltp: layer_tap_prefered {
-      compatible = "zmk,behavior-hold-tap";
-      label = "LAYER_TAP_PREFERED";
-      #binding-cells = <2>;
-      tapping_term_ms = <200>;
-      quick-tap-ms = <100>;
-      flavor = "tap-preferred";
-      bindings = <&mo>, <&kp>;
-    };
+    keymap {
+        compatible = "zmk,keymap";
 
-    lhp: layer_hold_prefered {
-      compatible = "zmk,behavior-hold-tap";
-      label = "LAYER_HOLD_PREFERED";
-      #binding-cells = <2>;
-      tapping_term_ms = <250>;
-      flavor = "hold-preferred";
-      bindings = <&mo>, <&kp>;
-    };
-  };
-
-  keymap {
-    compatible = "zmk,keymap";
-
-  //       default_layer {
-  //       label = "Default";
-  //       bindings = <
-  //               &graves                &kp Q          &kp W        &kp E   &kp R   &kp T         &kp Y       &kp U     &kp I       &kp O      &kp P             &kp LBKT
-  //               &kp TAB                &hm LSHFT A    &kp S        &kp D   &kp F   &kp G         &kp H       &kp J     &kp K       &kp L      &hm RSHFT SEMI    &kp APOS
-  //               &hm LCTRL LC(LA(A))    &hm LCTRL Z    &kp X        &kp C   &kp V   &kp B         &kp N       &kp M     &kp COMMA   &kp DOT    &mt BSLH FSLH     &kp RBKT
-  //                                      &kp LALT       &hm LGUI SPACE   &ltp LNUM LG(SPACE)       &lhp RSHFT ENTER   &lhp NUM BSPC   &ltp FN DEL
-  //       >; 
-  //
-
+        /* Основной слой клавиатуры */
         default_layer {
-        label = "Default";
-        bindings = <
+            label = "Default";
+            bindings = <
                 &graves                &kp Q          &kp W        &kp E   &kp R   &kp T         &kp Y        &kp U      &kp I         &kp O      &kp P             &kp LBKT
                 &kp TAB                &hm LSHFT A    &kp S        &kp D   &kp F   &kp G         &kp H        &kp J      &kp K         &kp L      &hm RSHFT SEMI    &kp APOS
                 &hm LCTRL LC(LA(A))    &hm LCTRL Z    &kp X        &kp C   &kp V   &kp B         &kp N        &kp M      &kp COMMA     &kp DOT    &mt BSLH FSLH     &kp RBKT
                                        &kp LALT       &hm LGUI SPACE   &ltp LNUM LG(SPACE)       &hm RSHFT ENTER   &lhp NUM BSPC     &ltp FN DEL
-        >; 
-  };
+            >; 
+        };
 
+        /* Слой с цифрами и символами */
         num_layer {
-        label="Num";
-        bindings = <
+            label = "Num";
+            bindings = <
                 &kp LA(GRAVE) &kp EXCL &kp AT &kp HASH &kp DLLR &kp PERCENT        &kp CARET      &kp AMPS      &kp UP      &kp STAR      &kp PLUS           &kp LA(MINUS)
                 &trans        &hm LSHFT N1 &kp N2 &kp N3 &kp N4 &kp N5             &kp LPAR       &kp LEFT      &kp DOWN    &kp RIGHT     &hm RSHFT MINUS    &kp UNDER
                 &trans        &hm LCTRL N6 &kp N7 &kp N8 &kp N9 &kp N0             &kp RPAR       &kp RA(N2)    &kp RA(N3)  &kp RA(N4)    &trans             &kp EQUAL
-                &trans &trans &kp BSPC                                               &mo SYSTEM     &trans        &trans  
-      >;
-    };
+                              &trans        &trans        &kp BSPC                  &mo SYSTEM     &trans        &trans  
+            >;
+        };
 
+        /* Альтернативный слой цифр (для левой руки) */
         lnum_layer {
-        label="LNum";
-        bindings = <
+            label = "LNum";
+            bindings = <
                 &trans     &kp UP     &kp LEFT  &kp DOWN  &kp RIGHT   &kp PERCENT       &none     &none       &none     &none       &none       &none
                 &trans     &hm LSHFT N1 &kp N2 &kp N3 &kp N4 &kp N5                     &none     &none       &none     &none       &none       &none
                 &trans     &hm LCTRL N6 &kp N7 &kp N8 &kp N9 &kp N0                     &none     &none       &none     &none       &trans      &none 
-                                                &kp ENTER  &hm LGUI BSPC    &trans      &trans    &trans      &trans    
-      >;
-    };    
+                                          &kp ENTER  &hm LGUI BSPC  &trans              &trans    &trans      &trans    
+            >;
+        };    
 
-
+        /* Функциональный слой */
         fn_layer {
-        label = "Fn";
-        bindings = <
+            label = "Fn";
+            bindings = <
                 &kp LC(LG(Q))  &kp C_BRI_DN  &kp C_BRI_UP  &kp LC(UP)  &kp F4  &kp F5   &kp F6          &kp F7          &kp C_PP        &kp C_MUTE      &kp C_VOL_DN  &kp C_VOL_UP
-                &trans  &hm LSHFT F10 &kp F2        &kp F3      &kp F4  &kp F5          &kp F11         &kp F12         &trans           &trans           &trans         &trans
-                &trans  &hm LCTRL F6  &kp F7        &kp F8      &kp F9  &kp F10         &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_SEL 4  &bt BT_SEL 5
-                                                    &trans      &trans  &trans          &trans          &bt BT_CLR      &trans  
+                &trans         &hm LSHFT F10 &kp F2        &kp F3      &kp F4  &kp F5   &kp F11         &kp F12         &trans          &trans          &trans        &trans
+                &trans         &hm LCTRL F6  &kp F7        &kp F8      &kp F9  &kp F10  &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_SEL 4  &bt BT_SEL 5
+                                             &trans        &trans      &trans  &trans   &bt BT_CLR      &trans  
+            >;
+        };
 
-                    >;
+        /* Слой для приложений с специфическими сочетаниями клавиш */
+        app_layer {
+            label = "App";
+            bindings = <  
+                &trans  &kp LC(LEFT)       &kp LC(LEFT)         &kp LC(UP)              &kp LC(RIGHT)            &kp LC(RIGHT)      &none   &none           &none     &none       &none         &none
+                &trans  &none              &kp LC(LA(LEFT))     &kp LC(LA(DOWN))        &kp LC(LA(RIGHT))        &kp LC(LA(UP))     &kp LG(H)   &none       &none     &none       &none         &none
+                &trans  &kp LC(LA(J))      &kp LC(LA(U))        &kp LC(LA(I))           &kp LC(LA(K))            &kp LC(LA(ENTER))  &none   &kp LC(LA(A))   &none     &none       &none         &none
+                        &kp LC(LG(SPACE))  &kp LG(LS(N4))       &trans                                                               &trans  &trans          &trans
+            >;
+        };
+
+        /* Системный слой для управления Bluetooth и т.д. */
+        system_layer {
+            label = "System";
+            bindings = <
+                &trans  &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_CLR           &none        &none        &none        &none        &none   &none
+                &trans  &none           &none           &none           &bt BT_SEL 4    &bt BT_SEL 5         &none        &none        &none        &none        &none   &none
+                &trans  &none           &none           &none           &none           &none                &none        &none        &none        &none        &none   &none
+                                        &none           &none           &kp N1          &none                &none        &none
+            >;
+        };
     };
-
-    // app_layer {
-    //   label = "App";
-    //   bindings = <  
-      
-    //          &trans  &kp LC(LEFT)       &kp LEFT             &kp LC(UP)              &kp RIGHT                &kp LC(RIGHT)                  &none   &none           &none     &none       &none         &none
-    //          &trans  &hm LSHFT N1       &kp N2               &kp N3                  &kp N4                   &kp N5                         &kp LG(H)   &none           &none     &none       &none         &none
-    //          &trans  &hm LCTRL N6       &kp N7               &kp N8                  &kp N9                   &kp N0                         &none   &kp LC(LA(A))   &none     &none       &none         &none
-    //          &kp LG(LS(N4))             &kp LC(LG(SPACE))    &trans                                                                          &trans  &trans          &trans
-    //   >;
-    // };
-
-    app_layer {
-      label = "App";
-      bindings = <  
-      
-        &trans  &kp LC(LEFT)       &kp LC(LEFT)         &kp LC(UP)              &kp LC(RIGHT)            &kp LC(RIGHT)                  &none   &none           &none     &none       &none         &none
-        &trans  &none              &kp LC(LA(LEFT))     &kp LC(LA(DOWN))        &kp LC(LA(RIGHT))        &kp LC(LA(UP))             &kp LG(H)   &none           &none     &none       &none         &none
-        &trans  &kp LC(LA(J))      &kp LC(LA(U))        &kp LC(LA(I))           &kp LC(LA(K))            &kp LC(LA(ENTER))          &none   &kp LC(LA(A))   &none     &none       &none         &none
-        &kp LC(LG(SPACE))          &kp LG(LS(N4))       &trans                                                                      &trans  &trans          &trans
-      >;
-    };
-
-    system_layer {
-
-      label = "System";
-      bindings = <
-   
-        &trans  &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2    &bt BT_SEL 3    &bt BT_CLR           &none        &none        &none        &none        &none   &none
-        &trans  &none           &none           &none           &bt BT_SEL 4    &bt BT_SEL 5         &none        &none        &none        &none        &none   &none
-        &trans  &none           &none           &none           &none           &none                &none        &none        &none        &none        &none   &none
-                                &none           &none           &kp N1                               &none        &none        &none
-      >;
-    };
-  };
-  
 };
