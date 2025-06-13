@@ -22,15 +22,14 @@
 &mt { quick-tap-ms = <200>; };
 
 / {
-    /* Определение комбо F+J для caps_word */
     combos {
         label = "Combos for Caps Word";
-        /* Комбо для клавиш F и J, используемое для активации caps_word */
         compatible = "zmk,combos";
-        combo_caps_fj {
+        /* Комбо для клавиш F и J, теперь включает Caps Lock */
+        combo_capslock_fj {
             timeout-ms = <50>;
             key-positions = <16 19>; // Позиции клавиш F и J
-            bindings = <&caps_word>;
+            bindings = <&kp CAPSLOCK>;
         };
       
         /* Комбо для клавиш A и SEMI, используемое для активации caps_word */
@@ -38,6 +37,13 @@
             timeout-ms = <50>;
             key-positions = <13 22>;  // Позиции клавиш A и SEMI
             bindings = <&caps_word>;
+        };
+
+        /* Комбо для клавиш 37 и 40, активирует левый Shift при удержании */
+        combo_lshift_37_40 {
+            timeout-ms = <50>;
+            key-positions = <37 40>;
+            bindings = <&kp LSHFT>;
         };
     };
 
