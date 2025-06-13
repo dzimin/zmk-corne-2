@@ -25,25 +25,18 @@
     combos {
         label = "Combos for Caps Word";
         compatible = "zmk,combos";
-        /* Комбо для клавиш F и J, теперь включает Caps Lock */
+        /* Комбо для клавиш F и J, теперь включает Caps Word */
         combo_capslock_fj {
             timeout-ms = <50>;
-            key-positions = <16 19>; // Позиции клавиш F и J
-            bindings = <&kp CAPSLOCK>;
-        };
-      
-        /* Комбо для клавиш A и SEMI, используемое для активации caps_word */
-        combo_caps_asemi{
-            timeout-ms = <50>;
-            key-positions = <13 22>;  // Позиции клавиш A и SEMI
+            key-positions = <16 19>;
             bindings = <&caps_word>;
         };
-
-        /* Комбо для клавиш 37 и 40, активирует левый Shift при удержании */
-        combo_lshift_37_40 {
+        
+        /* Комбо для клавиш A и SEMI, используемое для активации capslock */
+        combo_caps_asemi{
             timeout-ms = <50>;
-            key-positions = <37 40>;
-            bindings = <&kp LSHFT>;
+            key-positions = <13 22>;
+            bindings = <&kp CAPSLOCK>;
         };
     };
 
