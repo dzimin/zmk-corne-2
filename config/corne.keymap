@@ -17,10 +17,7 @@
 #define APP     4  // Слой для приложений
 #define SYSTEM  5  // Системный слой
 
-/* Настройка параметров удержания/тапа */
-&lt { quick-tap-ms = <200>; };
-&mt { quick-tap-ms = <200>; };
-&lhp {tapping-term-ms = <250>};
+
 
 / {
     combos {
@@ -71,7 +68,6 @@
         ltp: layer_tap_prefered {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            quick-tap-ms = <100>;
             flavor = "tap-preferred";
             bindings = <&mo>, <&kp>;
         };
@@ -84,6 +80,12 @@
             bindings = <&mo>, <&kp>;
         };
     };
+
+/* Настройка параметров удержания/тапа */
+&lt { quick-tap-ms = <200>; };
+&mt { quick-tap-ms = <200>; };
+&lhp { tapping-term-ms = <250> };
+&ltp { quick-tap-ms = <100> };
 
     keymap {
         compatible = "zmk,keymap";
@@ -155,3 +157,4 @@
         };
     };
 };
+
