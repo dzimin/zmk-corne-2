@@ -20,10 +20,10 @@
 /* Настройка параметров удержания/тапа */
 &lt { quick-tap-ms = <200>; };
 &mt { quick-tap-ms = <200>; };
+&lhp {tapping-term-ms = <250>};
 
 / {
     combos {
-        label = "Combos for Caps Word";
         compatible = "zmk,combos";
         /* Комбо для клавиш F и J, теперь включает Caps Word */
         combo_capslock_fj {
@@ -52,9 +52,7 @@
         /* Модификаторы для домашнего ряда (HOMEROW) */
         hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOMEROW_MODS";
             #binding-cells = <2>;
-            tapping_term_ms = <300>;
             quick-tap-ms = <300>;
             flavor = "tap-preferred";
             bindings = <&kp>, <&kp>;
@@ -63,9 +61,7 @@
         /* Модификаторы для домашнего ряда без быстрого тапа */
         hmt: homerow_mods_no_quicktap {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOMEROW_MODS";
             #binding-cells = <2>;
-            tapping_term_ms = <200>;
             quick-tap-ms = <200>;
             flavor = "balanced";
             bindings = <&kp>, <&kp>;
@@ -74,9 +70,7 @@
         /* Приоритет тапа для переключения слоёв */
         ltp: layer_tap_prefered {
             compatible = "zmk,behavior-hold-tap";
-            label = "LAYER_TAP_PREFERED";
             #binding-cells = <2>;
-            tapping_term_ms = <200>;
             quick-tap-ms = <100>;
             flavor = "tap-preferred";
             bindings = <&mo>, <&kp>;
@@ -85,9 +79,7 @@
         /* Приоритет удержания для переключения слоёв */
         lhp: layer_hold_prefered {
             compatible = "zmk,behavior-hold-tap";
-            label = "LAYER_HOLD_PREFERED";
             #binding-cells = <2>;
-            tapping_term_ms = <250>;
             flavor = "hold-preferred";
             bindings = <&mo>, <&kp>;
         };
